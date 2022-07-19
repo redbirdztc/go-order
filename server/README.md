@@ -2,7 +2,7 @@
 
 * GRPC
 * Persistance
-* Point to point & fanout
+* Point to point & Fanout
 * Auto create topic (Once generated,it won't be changed)
 
 # Design
@@ -20,14 +20,14 @@ q-->|send msg| subscriber(RandomQueye's Subscriber)
 ```
 
 * Fanout
-  ```mermaid
-  flowchart LR
-  pub(Publisher)-->|gen| msg(Message)
-  msg-->|send to| hdl(PublishHandler)
-  hdl-->|by msg topic| q(Queue)
-  hdl-->|by msg topic| q1(Queue)
-  hdl-->|by msg topic| q2(Queue)
-  q-->|send msg| qsub(QueueSubscriber)
-  q1-->|send msg| qsub1(QueueSubscriber)
-  q2-->|send msg| qsub2(QueueSubscriber)
-  ```
+```mermaid
+flowchart LR
+pub(Publisher)-->|gen| msg(Message)
+msg-->|send to| hdl(PublishHandler)
+hdl-->|by msg topic| q(Queue)
+hdl-->|by msg topic| q1(Queue)
+hdl-->|by msg topic| q2(Queue)
+q-->|send msg| qsub(QueueSubscriber)
+q1-->|send msg| qsub1(QueueSubscriber)
+q2-->|send msg| qsub2(QueueSubscriber)
+```
