@@ -1,14 +1,14 @@
-package server
+package main
 
 // Persist persist message
-func Persist(msg *Message) error {
+func Persist(msg *message) error {
 	return nil
 }
 
 // msgToBinary tansfer Message to binary data for persistance
 // | total length | id | milli-time | content length | content | topic length | topic | message type |
 // |------8B------|-8B-|-----8B-----|-------8B-------|-dynamic-|------8B------|dynamic|------8B------|
-func msgToBinary(msg *Message) (rs []byte, err error) {
+func msgToBinary(msg *message) (rs []byte, err error) {
 	idBytes := int642bin(int64(msg.id))
 	timeBytes := time2bin(&msg.ts)
 
@@ -18,7 +18,7 @@ func msgToBinary(msg *Message) (rs []byte, err error) {
 	topicBytes := string2bin(string(msg.topic))
 	topicLenBytes := int642bin(int64(len(topicBytes)))
 
-	tpBytes := int642bin(int64(msg.tp))
+	tpBytes := int642bin(int64(msg.topicTp))
 
 	totalLen := len(idBytes) + len(timeBytes) + len(cttLenBytes) +
 		len(cttBytes) + len(topicLenBytes) + len(topicBytes) + len(tpBytes)

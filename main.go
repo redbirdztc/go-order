@@ -8,7 +8,6 @@ import (
 
 func main() {
 	n := 1
-
 	nbytes := i2bin(&n)
 
 	for i := 0; i < len(nbytes); i++ {

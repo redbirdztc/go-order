@@ -1,24 +1,41 @@
-package server
+package main
 
 import "time"
 
-// MessageType message will be send in some way
-type MessageType int
+// message object to send
+type message struct {
+	id int // 8B
 
-const (
-	// MessageTypeSingle One-2-one mode
-	// For a message, it will be consumed for one time by one consumer whatever the number of subscribers
-	MessageTypeSingle MessageType = iota
-	// MessageTypeFanout One-2-many mode
-	// For a message, it will be sent to all consumer that subscribe the message topic
-	MessageTypeFanout
-)
+	ts      time.Time // 8B
+	content string    // dynamic max 2MB
 
-// Message object to send
-type Message struct {
-	id      int         // 8B
-	ts      time.Time   // 8B
-	content string      // dynamic max 2MB
-	topic   Topic       // dynamic max 128B
-	tp      MessageType // 8B
+	topic   string    // dynamic max 128B
+	topicTp TopicType // 8B
+}
+
+func newMessage(ts time.Time, content string, topic string, topicTp TopicType) (m *message) {
+	m = &message{
+		ts:      ts,
+		content: content,
+		topic:   topic,
+		topicTp: topicTp,
+	}
+	m.markID()
+	return
+}
+
+// duplicate message with a new id
+func (m *message) duplicate() *message {
+	dup := &message{
+		ts:      m.ts,
+		content: m.content,
+		topic:   m.topic,
+		topicTp: m.topicTp,
+	}
+	dup.markID()
+	return dup
+}
+
+func (m *message) markID() {
+	m.id = goorder.idM.getID(idTypeMessage)
 }

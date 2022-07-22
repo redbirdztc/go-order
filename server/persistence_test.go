@@ -1,4 +1,4 @@
-package server
+package main
 
 import (
 	"testing"
@@ -7,7 +7,7 @@ import (
 
 func Test_msgToBinary(t *testing.T) {
 	ts := time.Now()
-	m := Message{1, ts, "mycontent", "mytopic", MessageTypeSingle}
+	m := message{1, ts, "mycontent", "mytopic", TopicTypeSignle}
 	r, _ := msgToBinary(&m)
 
 	totalLength := bin2int64(r[:8])
@@ -42,8 +42,8 @@ func Test_msgToBinary(t *testing.T) {
 		t.Errorf("content err. expect %s, got %s", "mytopic", topic)
 	}
 
-	msgTp := MessageType(bin2int64(r[40+cttLen+topicLen:]))
-	if msgTp != MessageTypeSingle {
-		t.Errorf("content err. expect %d, got %d", MessageTypeSingle, msgTp)
+	msgTp := TopicType(bin2int64(r[40+cttLen+topicLen:]))
+	if msgTp != TopicTypeSignle {
+		t.Errorf("content err. expect %d, got %d", TopicTypeSignle, msgTp)
 	}
 }
